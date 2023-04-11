@@ -106,7 +106,6 @@ $(document).ready(function () {
     $(document).on('keyup', '.ip', function () {
         val = $(this).val();
         id = $(this).attr('id');
-        console.log(val);
         $.ajax({
             type: "POST",
             url: "handler.php",
