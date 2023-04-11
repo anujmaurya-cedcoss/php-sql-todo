@@ -11,20 +11,34 @@ function display(param) {
     })
 }
 display('all');
+
+// function to count remaining
+function countRemaining() {
+    $.ajax({
+        type: "POST",
+        url: "handler.php",
+        data: { 'type': 'count_completed' },
+        dataType: 'text',
+        success: function (res) {
+            // display('all');
+            $('.todo-left').html("Remaining : " + res);
+        }
+    });
+}
+
 $(document).ready(function () {
     // to add in todo
     $(document).on('click', '.add-todo', function () {
         title = $('#form3').val();
         date = $('#datepicker').val();
-        console.log(date);
         $.ajax({
             type: "POST",
             url: "handler.php",
             data: { 'type': 'add', 'title': title, 'date': date },
             dataType: 'text',
             success: function (res) {
-                console.log(res);
                 display('all');
+                countRemaining();
             }
         })
     })
@@ -39,13 +53,13 @@ $(document).ready(function () {
             dataType: 'text',
             success: function (res) {
                 display('all');
+                countRemaining();
             }
         })
     })
     // action on delete button
     $(document).on('click', '.delete-btn', function () {
         idx = $(this).attr('id');
-        console.log(idx);
         $.ajax({
             type: "POST",
             url: "handler.php",
@@ -53,6 +67,7 @@ $(document).ready(function () {
             dataType: 'text',
             success: function (res) {
                 display('all');
+                countRemaining();
             }
         })
     })
@@ -60,14 +75,17 @@ $(document).ready(function () {
     // action on display all button
     $(document).on('click', '.all', function () {
         display('all');
+        countRemaining();
     })
 
     $(document).on('click', '#active', function () {
         display('incomplete');
+        countRemaining();
     })
 
     $(document).on('click', '.completed', function () {
         display('complete');
+        countRemaining();
     })
     // clear complete action
     $(document).on('click', '.clear-complete', function () {
@@ -78,25 +96,24 @@ $(document).ready(function () {
             dataType: 'text',
             success: function (res) {
                 display('all');
+                countRemaining();
             }
         })
     });
-    // count incomplete tasks
-
-
-
-
-
-
-
-
-
 
 
     // to edit
-    $(".ip").keyup(function () {
-        $val = $(this).val();
-        console.log();
-    });
-
+    $(document).on('keyup', '.ip', function () {
+        val = $(this).val();
+        id = $(this).attr('id');
+        console.log(val);
+        $.ajax({
+            type: "POST",
+            url: "handler.php",
+            data: { 'type': 'update', 'val': val, 'id': id },
+            dataType: 'text',
+        })
+    })
+    display('all');
+    countRemaining();
 });

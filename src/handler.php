@@ -1,8 +1,12 @@
 <?php
-// $conn = mysqli_connect("mysql-server", "root", "secret", "todo");
+session_start();
+if (!isset($_SESSION['count_active'])) {
+    $_SESSION['count_active'] = 0;
+}
 include('config.php');
 $type = $_POST['type'];
 
+// function to display all completed tasks
 function displayComplete($conn)
 {
     $sql = "SELECT * FROM todoList WHERE `position` = 'inactive'";
@@ -23,16 +27,18 @@ function displayComplete($conn)
     }
     return $res;
 }
-
+// function to display all incomplete tasks
 function displayIncomplete($conn)
 {
     include_once('config.php');
     $sql = "SELECT * FROM todoList WHERE `position` = 'active'";
     $result = mysqli_query($conn, $sql);
     $res = "";
+    $_SESSION['count_active'] = 0;
     if (mysqli_num_rows($result) > 0) {
         // output data of each row
         while ($row = mysqli_fetch_assoc($result)) {
+            $_SESSION['count_active']++;
             $res .= "<li class=\"list-group-item d-flex justify-content-between border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2\">
                         <div class=\"d-flex\">
                             <input class=\"form-check-input me-2 toggle-item\" type=\"checkbox\" id = '$row[id]'
@@ -46,6 +52,7 @@ function displayIncomplete($conn)
     return $res;
 }
 switch ($type) {
+    // to add new task
     case 'add':
         // date is yet not added
         $title = $_POST['title'];
@@ -56,6 +63,8 @@ switch ($type) {
         echo "<pre></pre>";
         print_r($sql);
         break;
+
+    // to display all tasks
     case 'display':
         $param = $_POST['param'];
         switch ($param) {
@@ -73,9 +82,8 @@ switch ($type) {
                 break;
         }
 
+    // to toggle between complete and incomplete tasks 
     case 'toggle':
-        // echo "<pre></pre>";
-        // print_r($_POST);
         if (isset($_POST['id'])) {
             $idx = $_POST['id'];
             $sql = "SELECT `position` FROM todoList WHERE `id` = '$idx'";
@@ -91,7 +99,7 @@ switch ($type) {
             $res = mysqli_query($conn, $sql);
         }
         break;
-
+    // to delete a task
     case 'delete':
         $id = $_POST['id'];
         $sql = "DELETE FROM `todoList` WHERE `id` = '$id'";
@@ -101,12 +109,24 @@ switch ($type) {
         echo $id;
         break;
 
+    // to clear all completed 
     case 'clear_completed':
         $sql = "DELETE FROM `todoList` WHERE `position` = 'inactive'";
         $res = mysqli_query($conn, $sql);
+        break;
+    // to update a particular incomplete task
+    case 'update':
+        $val = $_POST['val'];
+        $id = $_POST['id'];
+        $sql = "UPDATE `todoList` SET `title`='$val' WHERE `id` = '$id'";
+        $res = mysqli_query($conn, $sql);
+        break;
+    // to find the count of all incomplete tasks
+    case 'count_completed':
+        displayIncomplete($conn);
+        echo $_SESSION['count_active'];
+        break;
     default:
-        # code...
         break;
 }
-
 ?>

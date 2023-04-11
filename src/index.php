@@ -29,17 +29,17 @@
                                     </div>
                                     <div class="btn btn-primary btn-lg mx-2 my-0 add-todo">Add</div>
                                     <div>
-                                        <input type='date' id = 'datepicker'  date-format='yyyy-mm-dd'  > 
+                                        <!-- date picker -->
+                                        <input type='date' id='datepicker' date-format='yyyy-mm-dd'>
                                     </div>
                                 </form>
-
                                 <ul class="list-group mb-0 incomplete-list">
                                 </ul>
                                 <ul class="list-group mb-0 complete-list">
 
                                 </ul>
-
-                                <div class="btn btn-light btn-lg mx-2 my-0 todo-left"> </div>
+                                <!-- footer buttons -->
+                                <div class="todo-left"> </div>
                                 <div class="btn btn-light btn-lg mx-2 my-0 all">All</div>
                                 <div class="btn btn-light btn-lg mx-2 my-0 " id="active">Active</div>
                                 <div class="btn btn-light btn-lg mx-2 my-0 completed">Completed</div>
@@ -56,4 +56,5 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script src="./JS/main.js"></script>
+
 </html>
